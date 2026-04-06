@@ -1,0 +1,93 @@
+---
+export interface Props {
+  defaultLevel?: 'beginner' | 'intermediate' | 'expert';
+}
+const { defaultLevel = 'beginner' } = Astro.props;
+---
+
+<div style="margin-bottom:2rem;">
+  <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;flex-wrap:wrap;">
+    <span style="font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--color-text-subtle);">Knowledge Level</span>
+  </div>
+  <div class="level-tabs" role="tablist" aria-label="Knowledge level selector">
+    <button
+      class={`level-tab ${defaultLevel === 'beginner' ? 'active-beginner' : ''}`}
+      data-level="beginner"
+      role="tab"
+      aria-selected={defaultLevel === 'beginner' ? 'true' : 'false'}
+      aria-controls="panel-beginner"
+    >
+      🌱 Beginner
+    </button>
+    <button
+      class={`level-tab ${defaultLevel === 'intermediate' ? 'active-intermediate' : ''}`}
+      data-level="intermediate"
+      role="tab"
+      aria-selected={defaultLevel === 'intermediate' ? 'true' : 'false'}
+      aria-controls="panel-intermediate"
+    >
+      ⚡ Intermediate
+    </button>
+    <button
+      class={`level-tab ${defaultLevel === 'expert' ? 'active-expert' : ''}`}
+      data-level="expert"
+      role="tab"
+      aria-selected={defaultLevel === 'expert' ? 'true' : 'false'}
+      aria-controls="panel-expert"
+    >
+      🔬 Expert
+    </button>
+  </div>
+  <p style="font-size:0.78rem;color:var(--color-text-subtle);margin-top:0.4rem;" id="level-description">
+    {defaultLevel === 'beginner' && 'Plain-language explanations — no prior knowledge needed.'}
+    {defaultLevel === 'intermediate' && 'Concepts and terminology for those with some AI background.'}
+    {defaultLevel === 'expert' && 'Full technical depth: math, code, research papers, and more.'}
+  </p>
+</div>
+
+<script is:inline>
+(function () {
+  var tabs = document.querySelectorAll('.level-tab');
+  var desc = document.getElementById('level-description');
+  var descriptions = {
+    beginner: 'Plain-language explanations — no prior knowledge needed.',
+    intermediate: 'Concepts and terminology for those with some AI background.',
+    expert: 'Full technical depth: math, code, research papers, and more.',
+  };
+
+  function activate(level) {
+    tabs.forEach(function (tab) {
+      tab.classList.remove('active-beginner', 'active-intermediate', 'active-expert');
+      tab.setAttribute('aria-selected', 'false');
+    });
+    var activeTab = document.querySelector('[data-level="' + level + '"]');
+    if (activeTab) {
+      activeTab.classList.add('active-' + level);
+      activeTab.setAttribute('aria-selected', 'true');
+    }
+
+    document.querySelectorAll('.level-panel').forEach(function (panel) {
+      panel.classList.remove('active');
+    });
+    var activePanel = document.getElementById('panel-' + level);
+    if (activePanel) activePanel.classList.add('active');
+
+    if (desc) desc.textContent = descriptions[level] || '';
+    try { localStorage.setItem('aihub-level', level); } catch(e) {}
+  }
+
+  // Restore saved level
+  var saved;
+  try { saved = localStorage.getItem('aihub-level'); } catch(e) {}
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      activate(tab.getAttribute('data-level'));
+    });
+  });
+
+  if (saved && document.querySelector('[data-level="' + saved + '"]')) {
+    activate(saved);
+  }
+})();
+</script>

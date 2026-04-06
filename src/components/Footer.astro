@@ -1,0 +1,77 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<footer style="border-top:1px solid var(--color-border);background:var(--color-bg-card);margin-top:6rem;">
+  <div style="max-width:1280px;margin:0 auto;padding:3rem 1.5rem 2rem;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;margin-bottom:3rem;">
+
+      <!-- Brand -->
+      <div>
+        <a href={`${base}/`} style="display:inline-flex;align-items:center;gap:0.6rem;text-decoration:none;margin-bottom:0.75rem;">
+          <span style="width:28px;height:28px;background:linear-gradient(135deg,#4f46e5,#06b6d4);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:900;color:white;">AI</span>
+          <span style="font-size:1rem;font-weight:800;color:var(--color-text);">Hub</span>
+        </a>
+        <p style="font-size:0.825rem;color:var(--color-text-muted);line-height:1.6;max-width:220px;">
+          The AI encyclopedia for everyone — from curious newcomers to seasoned researchers.
+        </p>
+      </div>
+
+      <!-- Explore -->
+      <div>
+        <h4 style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-subtle);margin-bottom:0.75rem;">Explore</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.4rem;">
+          {[
+            ['All Topics', `${base}/topics`],
+            ['Neural Networks', `${base}/topics/neural-networks`],
+            ['Large Language Models', `${base}/topics/large-language-models`],
+          ].map(([label, href]) => (
+            <li><a href={href} style="font-size:0.85rem;color:var(--color-text-muted);text-decoration:none;transition:color 0.1s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--color-text-muted)'">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Knowledge Levels -->
+      <div>
+        <h4 style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-subtle);margin-bottom:0.75rem;">Knowledge Levels</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.4rem;">
+          {[
+            ['🌱 Beginner', 'For everyday people curious about AI'],
+            ['⚡ Intermediate', 'For those with some AI experience'],
+            ['🔬 Expert', 'Full technical depth with papers & code'],
+          ].map(([label, desc]) => (
+            <li>
+              <span style="font-size:0.85rem;color:var(--color-text-muted);display:block;">{label}</span>
+              <span style="font-size:0.75rem;color:var(--color-text-subtle);">{desc}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h4 style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-subtle);margin-bottom:0.75rem;">Resources</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.4rem;">
+          {[
+            ['UI Elements', `${base}/elements`],
+            ['GitHub', 'https://github.com/Uriziel01/aihub'],
+          ].map(([label, href]) => (
+            <li><a href={href} style="font-size:0.85rem;color:var(--color-text-muted);text-decoration:none;transition:color 0.1s;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--color-text-muted)'">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div style="border-top:1px solid var(--color-border);padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <p style="font-size:0.8rem;color:var(--color-text-subtle);margin:0;">
+        © {new Date().getFullYear()} AIHub. Open knowledge about AI for everyone.
+      </p>
+      <div style="display:flex;gap:1rem;">
+        <span class="badge badge-beginner">🌱 Beginner</span>
+        <span class="badge badge-intermediate">⚡ Intermediate</span>
+        <span class="badge badge-expert">🔬 Expert</span>
+      </div>
+    </div>
+  </div>
+</footer>

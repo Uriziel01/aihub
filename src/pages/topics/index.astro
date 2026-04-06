@@ -1,0 +1,188 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import TopicCard from '../../components/TopicCard.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const allTopics = [
+  // Foundations
+  { title: 'Neural Networks', description: 'The fundamental architecture of modern AI — layers of interconnected nodes that learn patterns from data.', href: `${base}/topics/neural-networks`, tags: ['Deep Learning', 'Fundamentals'], level: 'all' as const, emoji: '🧠', category: 'Foundations' },
+  { title: 'Machine Learning', description: 'Teaching computers to learn from experience without explicit programming.', href: `${base}/topics`, tags: ['ML', 'Statistics'], level: 'beginner' as const, emoji: '📊', category: 'Foundations' },
+  { title: 'Gradient Descent', description: 'The optimization algorithm that trains neural networks by minimizing loss functions.', href: `${base}/topics`, tags: ['Optimization', 'Math'], level: 'intermediate' as const, emoji: '📉', category: 'Foundations' },
+  { title: 'Backpropagation', description: 'How neural networks compute gradients and update weights during training.', href: `${base}/topics`, tags: ['Training', 'Math'], level: 'expert' as const, emoji: '🔄', category: 'Foundations' },
+  // NLP & LLMs
+  { title: 'Large Language Models', description: 'The technology behind ChatGPT and modern AI text generation systems.', href: `${base}/topics/large-language-models`, tags: ['NLP', 'GPT', 'Transformers'], level: 'all' as const, emoji: '💬', category: 'NLP & LLMs' },
+  { title: 'Transformer Architecture', description: 'The "Attention is All You Need" model that revolutionized NLP.', href: `${base}/topics`, tags: ['Architecture', 'Attention'], level: 'expert' as const, emoji: '⚙️', category: 'NLP & LLMs' },
+  { title: 'Tokenization', description: 'How text is split into tokens that language models can process.', href: `${base}/topics`, tags: ['NLP', 'Preprocessing'], level: 'intermediate' as const, emoji: '✂️', category: 'NLP & LLMs' },
+  { title: 'Embeddings', description: 'Representing words, sentences, and documents as vectors in high-dimensional space.', href: `${base}/topics`, tags: ['NLP', 'Vectors'], level: 'intermediate' as const, emoji: '🔢', category: 'NLP & LLMs' },
+  { title: 'Prompt Engineering', description: 'The art and science of crafting inputs that get the best results from AI models.', href: `${base}/topics`, tags: ['LLMs', 'Practical'], level: 'beginner' as const, emoji: '✍️', category: 'NLP & LLMs' },
+  // Computer Vision
+  { title: 'Convolutional Neural Networks', description: 'Specialized neural networks for processing images and spatial data.', href: `${base}/topics`, tags: ['CNN', 'Vision'], level: 'intermediate' as const, emoji: '👁️', category: 'Computer Vision' },
+  { title: 'Object Detection', description: 'Finding and classifying objects within images using neural networks.', href: `${base}/topics`, tags: ['Vision', 'YOLO'], level: 'intermediate' as const, emoji: '🎯', category: 'Computer Vision' },
+  { title: 'Generative Adversarial Networks', description: 'Two-network architectures that generate realistic images, audio, and more.', href: `${base}/topics`, tags: ['GANs', 'Generative'], level: 'expert' as const, emoji: '🎨', category: 'Computer Vision' },
+  // RL
+  { title: 'Reinforcement Learning', description: 'Learning through trial, error, and reward signals — like training a pet.', href: `${base}/topics`, tags: ['RL', 'Policy'], level: 'intermediate' as const, emoji: '🎮', category: 'Reinforcement Learning' },
+  { title: 'Q-Learning', description: 'A model-free RL algorithm that learns the value of actions in states.', href: `${base}/topics`, tags: ['RL', 'Q-Table'], level: 'expert' as const, emoji: '♟️', category: 'Reinforcement Learning' },
+  // Safety & Ethics
+  { title: 'AI Alignment', description: 'Ensuring AI systems pursue goals that are safe and beneficial to humans.', href: `${base}/topics`, tags: ['Safety', 'Philosophy'], level: 'beginner' as const, emoji: '🎯', category: 'AI Safety & Ethics' },
+  { title: 'Hallucinations in LLMs', description: 'Why AI models sometimes confidently state false information — and how to mitigate it.', href: `${base}/topics`, tags: ['LLMs', 'Reliability'], level: 'intermediate' as const, emoji: '👻', category: 'AI Safety & Ethics' },
+];
+
+const categories = ['All', 'Foundations', 'NLP & LLMs', 'Computer Vision', 'Reinforcement Learning', 'AI Safety & Ethics'];
+const levels = ['All Levels', 'Beginner', 'Intermediate', 'Expert'];
+---
+
+<PageLayout title="All Topics" description="Browse all AI topics in the encyclopedia." activeNav="topics">
+  <div style="max-width:1280px;margin:0 auto;padding:3rem 1.5rem;">
+
+    <!-- Header -->
+    <div style="margin-bottom:2.5rem;">
+      <h1 style="font-size:2.25rem;font-weight:800;margin-bottom:0.5rem;">AI Topics</h1>
+      <p style="font-size:1.05rem;color:var(--color-text-muted);">
+        {allTopics.length} articles across {categories.length - 1} categories — pick your knowledge level and dive in.
+      </p>
+    </div>
+
+    <!-- Filters -->
+    <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:2rem;align-items:center;">
+      <!-- Category filter -->
+      <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+        {categories.map((cat, i) => (
+          <button
+            class={`filter-btn ${i === 0 ? 'active' : ''}`}
+            data-filter-type="category"
+            data-filter-value={cat}
+            style={`padding:0.35rem 0.85rem;border-radius:9999px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.15s;border:1px solid ${i === 0 ? 'var(--color-primary)' : 'var(--color-border)'};background:${i === 0 ? 'var(--color-primary-light)' : 'var(--color-bg-card)'};color:${i === 0 ? 'var(--color-primary)' : 'var(--color-text-muted)'};`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div style="height:24px;width:1px;background:var(--color-border);margin:0 0.25rem;" class="hide-mobile"></div>
+
+      <!-- Level filter -->
+      <div style="display:flex;flex-wrap:wrap;gap:0.4rem;">
+        {levels.map((lv, i) => (
+          <button
+            class={`filter-btn-level ${i === 0 ? 'active-level' : ''}`}
+            data-level-filter={lv.toLowerCase().replace(' ', '-')}
+            style={`padding:0.35rem 0.85rem;border-radius:9999px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.15s;border:1px solid ${i === 0 ? 'var(--color-primary)' : 'var(--color-border)'};background:${i === 0 ? 'var(--color-primary-light)' : 'var(--color-bg-card)'};color:${i === 0 ? 'var(--color-primary)' : 'var(--color-text-muted)'};`}
+          >
+            {i === 1 ? '🌱 ' : i === 2 ? '⚡ ' : i === 3 ? '🔬 ' : ''}{lv}
+          </button>
+        ))}
+      </div>
+
+      <!-- Search -->
+      <div style="flex:1;min-width:200px;position:relative;" class="hide-mobile">
+        <svg style="position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);color:var(--color-text-subtle);" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="search" id="topics-search" placeholder="Filter topics…" class="search-input" style="padding-left:2.25rem;font-size:0.85rem;padding-top:0.4rem;padding-bottom:0.4rem;" aria-label="Filter topics" />
+      </div>
+    </div>
+
+    <!-- Topic count -->
+    <p style="font-size:0.82rem;color:var(--color-text-subtle);margin-bottom:1.25rem;" id="topic-count">
+      Showing all {allTopics.length} topics
+    </p>
+
+    <!-- Topic Grid -->
+    <div id="topics-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;">
+      {allTopics.map(topic => (
+        <div
+          class="topic-item"
+          data-category={topic.category}
+          data-level={topic.level}
+          data-title={topic.title.toLowerCase()}
+          data-desc={topic.description.toLowerCase()}
+        >
+          <TopicCard {...topic} />
+        </div>
+      ))}
+    </div>
+
+    <!-- Empty state -->
+    <div id="no-results" style="display:none;text-align:center;padding:4rem 1rem;">
+      <span style="font-size:3rem;">🔍</span>
+      <h3 style="margin:1rem 0 0.5rem;">No topics found</h3>
+      <p style="color:var(--color-text-muted);">Try a different filter or search term.</p>
+    </div>
+
+  </div>
+</PageLayout>
+
+<script is:inline>
+(function () {
+  var currentCategory = 'All';
+  var currentLevel = 'all-levels';
+  var currentSearch = '';
+
+  function filterTopics() {
+    var items = document.querySelectorAll('.topic-item');
+    var visible = 0;
+    items.forEach(function (item) {
+      var cat = item.getAttribute('data-category');
+      var lv = item.getAttribute('data-level');
+      var title = item.getAttribute('data-title') || '';
+      var desc = item.getAttribute('data-desc') || '';
+
+      var catMatch = currentCategory === 'All' || cat === currentCategory;
+      var lvMatch = currentLevel === 'all-levels' || lv === currentLevel || lv === 'all';
+      var searchMatch = !currentSearch || title.includes(currentSearch) || desc.includes(currentSearch);
+
+      var show = catMatch && lvMatch && searchMatch;
+      item.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    var count = document.getElementById('topic-count');
+    if (count) count.textContent = 'Showing ' + visible + ' topic' + (visible !== 1 ? 's' : '');
+
+    var noResults = document.getElementById('no-results');
+    if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  // Category buttons
+  document.querySelectorAll('.filter-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      currentCategory = this.getAttribute('data-filter-value') || 'All';
+      document.querySelectorAll('.filter-btn').forEach(function (b) {
+        b.style.background = 'var(--color-bg-card)';
+        b.style.color = 'var(--color-text-muted)';
+        b.style.borderColor = 'var(--color-border)';
+      });
+      this.style.background = 'var(--color-primary-light)';
+      this.style.color = 'var(--color-primary)';
+      this.style.borderColor = 'var(--color-primary)';
+      filterTopics();
+    });
+  });
+
+  // Level buttons
+  document.querySelectorAll('.filter-btn-level').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      currentLevel = this.getAttribute('data-level-filter') || 'all-levels';
+      document.querySelectorAll('.filter-btn-level').forEach(function (b) {
+        b.style.background = 'var(--color-bg-card)';
+        b.style.color = 'var(--color-text-muted)';
+        b.style.borderColor = 'var(--color-border)';
+      });
+      this.style.background = 'var(--color-primary-light)';
+      this.style.color = 'var(--color-primary)';
+      this.style.borderColor = 'var(--color-primary)';
+      filterTopics();
+    });
+  });
+
+  // Search
+  var searchInput = document.getElementById('topics-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      currentSearch = this.value.toLowerCase().trim();
+      filterTopics();
+    });
+  }
+})();
+</script>

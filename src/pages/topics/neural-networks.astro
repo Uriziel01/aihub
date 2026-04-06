@@ -1,0 +1,502 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import KnowledgeLevelSelector from '../../components/KnowledgeLevelSelector.astro';
+import Callout from '../../components/Callout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<PageLayout
+  title="Neural Networks"
+  description="Learn how neural networks work — explained at beginner, intermediate, and expert levels."
+  activeNav="topics"
+>
+  <div style="max-width:1280px;margin:0 auto;padding:2.5rem 1.5rem;display:grid;grid-template-columns:1fr min(720px,100%) 1fr;gap:2rem;" class="article-grid">
+
+    <!-- Left sidebar (TOC) -->
+    <aside style="grid-column:1;position:sticky;top:80px;align-self:start;padding-top:0.25rem;" class="hide-mobile">
+      <nav aria-label="Table of contents">
+        <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-subtle);margin-bottom:0.75rem;">On this page</p>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.1rem;">
+          {[
+            ['#overview', 'Overview'],
+            ['#how-it-works', 'How It Works'],
+            ['#training', 'Training'],
+            ['#types', 'Types of Networks'],
+            ['#applications', 'Real-world Applications'],
+            ['#further-reading', 'Further Reading'],
+          ].map(([href, label]) => (
+            <li><a href={href} class="sidebar-link">{label}</a></li>
+          ))}
+        </ul>
+        <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--color-border);">
+          <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-subtle);margin-bottom:0.75rem;">Related Topics</p>
+          {[
+            ['Deep Learning', `${base}/topics`],
+            ['Backpropagation', `${base}/topics`],
+            ['Activation Functions', `${base}/topics`],
+          ].map(([label, href]) => (
+            <a href={href} class="sidebar-link" style="font-size:0.8rem;">{label}</a>
+          ))}
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <article style="grid-column:2;min-width:0;">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" style="margin-bottom:1.25rem;">
+        <ol style="list-style:none;padding:0;margin:0;display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--color-text-subtle);">
+          <li><a href={`${base}/`} style="color:var(--color-text-muted);text-decoration:none;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--color-text-muted)'">Home</a></li>
+          <li>›</li>
+          <li><a href={`${base}/topics`} style="color:var(--color-text-muted);text-decoration:none;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--color-text-muted)'">Topics</a></li>
+          <li>›</li>
+          <li style="color:var(--color-text);">Neural Networks</li>
+        </ol>
+      </nav>
+
+      <!-- Article header -->
+      <header style="margin-bottom:2rem;">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+          <span class="badge badge-intermediate">⚡ Intermediate</span>
+          <span class="tag">Deep Learning</span>
+          <span class="tag">Fundamentals</span>
+          <span class="tag">Architecture</span>
+        </div>
+        <h1 style="font-size:2.5rem;font-weight:800;line-height:1.15;margin-bottom:0.75rem;">
+          🧠 Neural Networks
+        </h1>
+        <p style="font-size:1.1rem;color:var(--color-text-muted);line-height:1.6;margin-bottom:1.5rem;">
+          The fundamental architecture of modern AI — layers of interconnected nodes that learn patterns from data.
+          From simple perceptrons to deep learning, this is where AI begins.
+        </p>
+        <div style="display:flex;align-items:center;gap:1.5rem;font-size:0.8rem;color:var(--color-text-subtle);padding-bottom:1.5rem;border-bottom:1px solid var(--color-border);">
+          <span>📅 Updated April 2025</span>
+          <span>⏱ 8 min read</span>
+          <span>📖 ~2,400 words</span>
+        </div>
+      </header>
+
+      <!-- Level selector -->
+      <KnowledgeLevelSelector defaultLevel="beginner" />
+
+      <!-- === BEGINNER PANEL === -->
+      <div id="panel-beginner" class="level-panel active">
+        <div class="prose">
+
+          <section id="overview">
+            <Callout type="success" title="What you'll learn">
+              By the end of this section you'll understand what a neural network is, why it matters,
+              and be able to explain it to someone else. No maths required!
+            </Callout>
+
+            <h2>What is a Neural Network?</h2>
+            <p>
+              Imagine you're teaching a child to recognise cats. You show them hundreds of photos — some with cats, some without —
+              and each time you say "yes, cat" or "no, not a cat." Eventually the child learns to spot a cat without being told the rules.
+              That's essentially how a neural network learns.
+            </p>
+            <p>
+              A <strong>neural network</strong> is a computer program inspired by the human brain. Just like your brain has billions
+              of connected neurons that pass signals to each other, a neural network has <em>artificial neurons</em> (called <strong>nodes</strong>)
+              that are connected in layers.
+            </p>
+          </section>
+
+          <section id="how-it-works">
+            <h2>How does it work?</h2>
+            <p>Think of it like a chain of decision-makers:</p>
+            <ul>
+              <li><strong>Input layer</strong> — receives the raw data (like pixel values of an image)</li>
+              <li><strong>Hidden layers</strong> — process the data step by step, finding patterns</li>
+              <li><strong>Output layer</strong> — gives the final answer ("cat" or "not cat")</li>
+            </ul>
+            <p>
+              Each connection between nodes has a <strong>weight</strong> — a number that says how important that connection is.
+              The network learns by adjusting these weights based on its mistakes. Get it wrong? Adjust. Get it right? Keep it.
+            </p>
+
+            <!-- Visual diagram placeholder -->
+            <div style="background:var(--color-bg-subtle);border:1px solid var(--color-border);border-radius:12px;padding:2rem;text-align:center;margin:1.5rem 0;">
+              <div style="display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap;">
+                <div style="text-align:center;">
+                  <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.5rem;">
+                    {['📷', '📷', '📷'].map(e => <div style="width:40px;height:40px;background:var(--color-beginner-bg);border:2px solid var(--color-beginner);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;">{e}</div>)}
+                  </div>
+                  <span style="font-size:0.72rem;color:var(--color-text-subtle);">Input</span>
+                </div>
+                <div style="font-size:1.5rem;color:var(--color-text-subtle);">→</div>
+                <div style="text-align:center;">
+                  <div style="display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.5rem;">
+                    {['🔵','🔵','🔵','🔵'].map(e => <div style="width:36px;height:36px;background:var(--color-intermediate-bg);border:2px solid var(--color-intermediate);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;">{e}</div>)}
+                  </div>
+                  <span style="font-size:0.72rem;color:var(--color-text-subtle);">Hidden</span>
+                </div>
+                <div style="font-size:1.5rem;color:var(--color-text-subtle);">→</div>
+                <div style="text-align:center;">
+                  <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:0.5rem;">
+                    {['🐱', '🚫'].map(e => <div style="width:40px;height:40px;background:var(--color-expert-bg);border:2px solid var(--color-expert);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;">{e}</div>)}
+                  </div>
+                  <span style="font-size:0.72rem;color:var(--color-text-subtle);">Output</span>
+                </div>
+              </div>
+              <p style="margin-top:1rem;font-size:0.8rem;color:var(--color-text-subtle);">A simplified neural network: pixels in → answer out</p>
+            </div>
+          </section>
+
+          <section id="training">
+            <h2>Learning from mistakes</h2>
+            <p>
+              Here's the magic: the network starts knowing <em>nothing</em>. Every weight starts as a random guess.
+              Then it sees thousands of examples, makes predictions, and each time it's wrong, a process called
+              <strong>backpropagation</strong> adjusts its weights slightly in the right direction.
+              After millions of adjustments, it becomes surprisingly accurate.
+            </p>
+            <Callout type="info" title="Real-world example">
+              Netflix uses neural networks to recommend shows. It's learned that people who like certain movies
+              also tend to like others — without ever being told the rules. It figured it out from watching millions of people's viewing habits.
+            </Callout>
+          </section>
+
+          <section id="applications">
+            <h2>Where are neural networks used?</h2>
+            <ul>
+              <li>🎤 <strong>Voice assistants</strong> — Siri, Alexa, Google Assistant all use them</li>
+              <li>📸 <strong>Photo apps</strong> — face recognition, background blur</li>
+              <li>💊 <strong>Medicine</strong> — detecting cancer in X-rays with doctor-level accuracy</li>
+              <li>🚗 <strong>Self-driving cars</strong> — recognising pedestrians and traffic signs</li>
+              <li>🌐 <strong>Translation</strong> — Google Translate processes 100+ languages</li>
+              <li>🎮 <strong>Games</strong> — AI that beats world champions at Chess, Go, and StarCraft</li>
+            </ul>
+          </section>
+
+          <section id="further-reading">
+            <h2>Want to learn more?</h2>
+            <p>Switch to <strong>⚡ Intermediate</strong> mode above to dive into the actual technical concepts, or explore related topics below.</p>
+          </section>
+        </div>
+      </div>
+
+      <!-- === INTERMEDIATE PANEL === -->
+      <div id="panel-intermediate" class="level-panel">
+        <div class="prose">
+
+          <Callout type="info" title="Prerequisites">
+            You should be comfortable with basic programming concepts and have a rough idea of what AI is.
+            Familiarity with Python is helpful for the code examples.
+          </Callout>
+
+          <section id="overview">
+            <h2>Overview</h2>
+            <p>
+              A <strong>neural network</strong> is a parameterized function that maps inputs to outputs through a series of
+              learned transformations. A network with L layers computes:
+            </p>
+            <div class="math-block" style="font-size:0.95rem;">
+              f(x) = f<sub>L</sub>(f<sub>L-1</sub>(... f<sub>1</sub>(x; θ<sub>1</sub>) ...; θ<sub>L-1</sub>); θ<sub>L</sub>)
+            </div>
+            <p>
+              where each layer f<sub>i</sub> applies a linear transformation followed by a non-linear
+              <strong>activation function</strong> to introduce the capacity for modeling complex patterns.
+            </p>
+          </section>
+
+          <section id="how-it-works">
+            <h2>Forward Pass</h2>
+            <p>For a single fully-connected (dense) layer:</p>
+            <CodeBlock lang="python" filename="forward_pass.py">{`import numpy as np
+
+def dense_layer(x, W, b, activation='relu'):
+    """
+    x: input vector (n,)
+    W: weight matrix (n, m)
+    b: bias vector (m,)
+    """
+    z = x @ W + b          # Linear transformation
+    if activation == 'relu':
+        return np.maximum(0, z)   # ReLU activation
+    elif activation == 'sigmoid':
+        return 1 / (1 + np.exp(-z))
+    elif activation == 'softmax':
+        e = np.exp(z - z.max())   # numerically stable
+        return e / e.sum()
+    return z  # linear`}</CodeBlock>
+
+            <h3>Key Activation Functions</h3>
+            <div style="overflow-x:auto;">
+              <table class="data-table" style="border:1px solid var(--color-border);border-radius:8px;overflow:hidden;">
+                <thead>
+                  <tr>
+                    <th>Function</th>
+                    <th>Formula</th>
+                    <th>Use Case</th>
+                    <th>Issue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    ['Sigmoid', 'σ(x) = 1/(1+e⁻ˣ)', 'Binary classification output', 'Vanishing gradients'],
+                    ['ReLU', 'max(0, x)', 'Hidden layers (default)', 'Dead neurons'],
+                    ['GELU', '≈ x·Φ(x)', 'Transformers, BERT, GPT', 'Computationally heavier'],
+                    ['Softmax', 'eˣⁱ / Σeˣʲ', 'Multi-class output', 'Not for hidden layers'],
+                  ].map(([fn, formula, use, issue]) => (
+                    <tr>
+                      <td><strong>{fn}</strong></td>
+                      <td><code style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;">{formula}</code></td>
+                      <td style="font-size:0.82rem;">{use}</td>
+                      <td style="font-size:0.82rem;color:var(--color-text-subtle);">{issue}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="training">
+            <h2>Training: Gradient Descent</h2>
+            <p>
+              Training minimises a <strong>loss function</strong> L(θ) using gradient descent.
+              The loss measures how wrong the network's predictions are. Common choices:
+            </p>
+            <ul>
+              <li><strong>Cross-entropy loss</strong> — for classification problems</li>
+              <li><strong>Mean squared error</strong> — for regression problems</li>
+            </ul>
+            <CodeBlock lang="python" filename="training_loop.py">{`import torch
+import torch.nn as nn
+
+model = nn.Sequential(
+    nn.Linear(784, 256),
+    nn.ReLU(),
+    nn.Dropout(0.2),
+    nn.Linear(256, 128),
+    nn.ReLU(),
+    nn.Linear(128, 10),  # 10 classes
+)
+
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+criterion = nn.CrossEntropyLoss()
+
+for epoch in range(10):
+    for X_batch, y_batch in train_loader:
+        optimizer.zero_grad()
+        logits = model(X_batch)
+        loss = criterion(logits, y_batch)
+        loss.backward()          # Backprop
+        optimizer.step()         # Update weights`}</CodeBlock>
+
+            <Callout type="tip" title="Expert tip">
+              Adam optimizer combines momentum and adaptive learning rates. For most tasks, it converges
+              faster than plain SGD. Use weight decay (L2 regularization) via <code>AdamW</code> to prevent overfitting.
+            </Callout>
+          </section>
+
+          <section id="types">
+            <h2>Types of Neural Networks</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0;">
+              {[
+                { icon: '📋', name: 'MLP', full: 'Multi-Layer Perceptron', use: 'Tabular data, classification' },
+                { icon: '👁️', name: 'CNN', full: 'Convolutional NN', use: 'Images, spatial patterns' },
+                { icon: '🔁', name: 'RNN/LSTM', full: 'Recurrent NN', use: 'Time series, sequences' },
+                { icon: '🤖', name: 'Transformer', full: 'Attention-based', use: 'Language, vision, everything' },
+              ].map(t => (
+                <div style="background:var(--color-bg-subtle);border:1px solid var(--color-border);border-radius:8px;padding:1rem;">
+                  <div style="font-size:1.5rem;margin-bottom:0.5rem;">{t.icon}</div>
+                  <div style="font-weight:700;font-size:0.9rem;">{t.name}</div>
+                  <div style="font-size:0.75rem;color:var(--color-text-subtle);margin-bottom:0.25rem;">{t.full}</div>
+                  <div style="font-size:0.78rem;color:var(--color-text-muted);">{t.use}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- === EXPERT PANEL === -->
+      <div id="panel-expert" class="level-panel">
+        <div class="prose">
+
+          <Callout type="tip" title="Research-level content">
+            This section includes mathematical derivations, implementation details, and links to foundational papers.
+            Assumes familiarity with linear algebra, calculus, and probability theory.
+          </Callout>
+
+          <section id="overview">
+            <h2>Universal Approximation & Expressivity</h2>
+            <p>
+              The <strong>Universal Approximation Theorem</strong> (Cybenko, 1989; Hornik, 1991) states that a feedforward
+              network with at least one hidden layer and a non-polynomial activation function can approximate any
+              continuous function on a compact subset of ℝⁿ to arbitrary precision, given enough neurons.
+            </p>
+            <div class="math-block">
+              ∀ε &gt; 0, ∀f ∈ C(K), ∃NN: sup<sub>x∈K</sub> |f(x) − NN(x)| &lt; ε
+            </div>
+            <p>
+              However, this result is <em>existential</em> — it says such a network exists, not that gradient descent
+              will find it. Depth provides exponentially more expressivity than width for certain function classes
+              (Montufar et al., 2014), motivating deep architectures.
+            </p>
+          </section>
+
+          <section id="how-it-works">
+            <h2>Backpropagation: Full Derivation</h2>
+            <p>
+              For a network with parameters θ = &#123;W<sup>(l)</sup>, b<sup>(l)</sup>&#125;<sub>l=1..L</sub>,
+              we compute gradients via the chain rule. Define:
+            </p>
+            <div class="math-block">
+              z<sup>(l)</sup> = W<sup>(l)</sup>a<sup>(l-1)</sup> + b<sup>(l)</sup><br/>
+              a<sup>(l)</sup> = σ(z<sup>(l)</sup>)<br/>
+              δ<sup>(L)</sup> = ∇<sub>a</sub>L ⊙ σ'(z<sup>(L)</sup>)<br/>
+              δ<sup>(l)</sup> = ((W<sup>(l+1)</sup>)ᵀ δ<sup>(l+1)</sup>) ⊙ σ'(z<sup>(l)</sup>)<br/>
+              ∂L/∂W<sup>(l)</sup> = δ<sup>(l)</sup>(a<sup>(l-1)</sup>)ᵀ
+            </div>
+
+            <CodeBlock lang="python" filename="backprop_from_scratch.py">{`import numpy as np
+
+class NeuralNetwork:
+    def __init__(self, layer_sizes):
+        self.weights = []
+        self.biases = []
+        for i in range(len(layer_sizes) - 1):
+            # He initialization for ReLU
+            scale = np.sqrt(2.0 / layer_sizes[i])
+            self.weights.append(np.random.randn(layer_sizes[i], layer_sizes[i+1]) * scale)
+            self.biases.append(np.zeros((1, layer_sizes[i+1])))
+
+    def relu(self, z): return np.maximum(0, z)
+    def relu_prime(self, z): return (z > 0).astype(float)
+    def softmax(self, z):
+        e = np.exp(z - z.max(axis=1, keepdims=True))
+        return e / e.sum(axis=1, keepdims=True)
+
+    def forward(self, X):
+        self.activations = [X]
+        self.zs = []
+        a = X
+        for W, b in zip(self.weights[:-1], self.biases[:-1]):
+            z = a @ W + b
+            self.zs.append(z)
+            a = self.relu(z)
+            self.activations.append(a)
+        # Output layer: softmax
+        z = a @ self.weights[-1] + self.biases[-1]
+        self.zs.append(z)
+        a = self.softmax(z)
+        self.activations.append(a)
+        return a
+
+    def backward(self, y_onehot, lr=0.01):
+        m = y_onehot.shape[0]
+        # Output layer gradient (cross-entropy + softmax combined)
+        delta = self.activations[-1] - y_onehot  # dL/dz for softmax+CE
+        grads_w, grads_b = [], []
+
+        for l in range(len(self.weights) - 1, -1, -1):
+            dW = self.activations[l].T @ delta / m
+            db = delta.mean(axis=0, keepdims=True)
+            grads_w.insert(0, dW)
+            grads_b.insert(0, db)
+            if l > 0:
+                delta = (delta @ self.weights[l].T) * self.relu_prime(self.zs[l-1])
+
+        for l in range(len(self.weights)):
+            self.weights[l] -= lr * grads_w[l]
+            self.biases[l]  -= lr * grads_b[l]`}</CodeBlock>
+          </section>
+
+          <section id="training">
+            <h2>Optimization Landscape & Saddle Points</h2>
+            <p>
+              Neural network loss surfaces are non-convex with exponentially many local minima. However,
+              Dauphin et al. (2014) showed that for large networks, local minima are approximately as good as
+              global minima — the real problem is <em>saddle points</em>, where some eigenvalues of the Hessian
+              are negative and gradient descent stalls.
+            </p>
+            <div class="math-block">
+              H = ∇²L(θ),  λ<sub>i</sub> ∈ spec(H)<br/>
+              Saddle point: ∃i,j : λ<sub>i</sub> &gt; 0, λ<sub>j</sub> &lt; 0<br/>
+              SGD noise + momentum helps escape saddle points
+            </div>
+
+            <h3>Modern Optimizers</h3>
+            <CodeBlock lang="python" filename="adamw.py">{`# AdamW (Loshchilov & Hutter, 2019) — decoupled weight decay
+# Standard Adam conflates L2 regularization with weight decay
+
+class AdamW:
+    def __init__(self, params, lr=1e-3, betas=(0.9, 0.999),
+                 eps=1e-8, weight_decay=0.01):
+        self.params = params
+        self.lr = lr
+        self.b1, self.b2 = betas
+        self.eps = eps
+        self.wd = weight_decay
+        self.t = 0
+        self.m = [np.zeros_like(p) for p in params]  # 1st moment
+        self.v = [np.zeros_like(p) for p in params]  # 2nd moment
+
+    def step(self, grads):
+        self.t += 1
+        for i, (p, g) in enumerate(zip(self.params, grads)):
+            self.m[i] = self.b1 * self.m[i] + (1 - self.b1) * g
+            self.v[i] = self.b2 * self.v[i] + (1 - self.b2) * g**2
+            # Bias correction
+            m_hat = self.m[i] / (1 - self.b1**self.t)
+            v_hat = self.v[i] / (1 - self.b2**self.t)
+            # Weight decay applied separately (not to momentum)
+            p -= self.lr * self.wd * p
+            p -= self.lr * m_hat / (np.sqrt(v_hat) + self.eps)`}</CodeBlock>
+          </section>
+
+          <section id="further-reading">
+            <h2>Key Papers & References</h2>
+            <ul>
+              <li>Rumelhart, Hinton & Williams (1986). <em>Learning representations by back-propagating errors.</em> Nature.</li>
+              <li>LeCun et al. (1989). <em>Backpropagation applied to handwritten zip code recognition.</em></li>
+              <li>Glorot & Bengio (2010). <em>Understanding the difficulty of training deep feedforward neural networks.</em></li>
+              <li>He et al. (2015). <em>Delving Deep into Rectifiers.</em> — introduces He initialization and PReLU.</li>
+              <li>Loshchilov & Hutter (2019). <em>Decoupled Weight Decay Regularization.</em> — AdamW.</li>
+              <li>Dauphin et al. (2014). <em>Identifying and attacking the saddle point problem in high-dimensional non-convex optimization.</em></li>
+            </ul>
+          </section>
+        </div>
+      </div>
+
+      <!-- Article footer nav -->
+      <div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+        <a href={`${base}/topics`} class="btn btn-secondary">← All Topics</a>
+        <a href={`${base}/topics/large-language-models`} class="btn btn-secondary">Large Language Models →</a>
+      </div>
+
+    </article>
+
+    <!-- Right sidebar -->
+    <aside style="grid-column:3;position:sticky;top:80px;align-self:start;padding-top:0.25rem;" class="hide-mobile">
+      <div style="background:var(--color-bg-card);border:1px solid var(--color-border);border-radius:12px;padding:1.25rem;margin-bottom:1rem;">
+        <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-subtle);margin-bottom:0.75rem;">Quick Facts</p>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem;font-size:0.82rem;">
+          <li><span style="color:var(--color-text-subtle);">Invented</span><br/><strong>1940s–1980s</strong></li>
+          <li><span style="color:var(--color-text-subtle);">Deep Learning boom</span><br/><strong>2012 (AlexNet)</strong></li>
+          <li><span style="color:var(--color-text-subtle);">Key inventor</span><br/><strong>Geoffrey Hinton</strong></li>
+          <li><span style="color:var(--color-text-subtle);">Training data</span><br/><strong>Labeled examples</strong></li>
+        </ul>
+      </div>
+      <div style="background:var(--color-primary-light);border:1px solid var(--color-intermediate-border);border-radius:12px;padding:1.25rem;">
+        <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-primary);margin-bottom:0.5rem;">Up Next</p>
+        <a href={`${base}/topics/large-language-models`} style="font-size:0.875rem;font-weight:600;color:var(--color-text);text-decoration:none;display:block;margin-bottom:0.25rem;">Large Language Models →</a>
+        <p style="font-size:0.78rem;color:var(--color-text-muted);">See how neural networks scale to billions of parameters.</p>
+      </div>
+    </aside>
+
+  </div>
+</PageLayout>
+
+<style>
+  @media (max-width: 900px) {
+    .article-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>

@@ -1,0 +1,474 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import KnowledgeLevelSelector from '../../components/KnowledgeLevelSelector.astro';
+import Callout from '../../components/Callout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<PageLayout
+  title="Large Language Models"
+  description="Understand LLMs — the technology behind ChatGPT, Claude, and modern AI assistants. Explained at beginner, intermediate, and expert levels."
+  activeNav="topics"
+>
+  <div style="max-width:1280px;margin:0 auto;padding:2.5rem 1.5rem;display:grid;grid-template-columns:1fr min(720px,100%) 1fr;gap:2rem;" class="article-grid">
+
+    <!-- Left sidebar -->
+    <aside style="grid-column:1;position:sticky;top:80px;align-self:start;" class="hide-mobile">
+      <nav aria-label="Table of contents">
+        <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-subtle);margin-bottom:0.75rem;">On this page</p>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.1rem;">
+          {[
+            ['#what-is-an-llm', 'What is an LLM?'],
+            ['#how-it-works', 'How it Works'],
+            ['#training', 'Training & RLHF'],
+            ['#capabilities', 'Capabilities & Limits'],
+            ['#models', 'Notable Models'],
+            ['#further-reading', 'Papers & Resources'],
+          ].map(([href, label]) => (
+            <li><a href={href} class="sidebar-link">{label}</a></li>
+          ))}
+        </ul>
+        <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--color-border);">
+          <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-subtle);margin-bottom:0.75rem;">Related Topics</p>
+          {[
+            ['Neural Networks', `${base}/topics/neural-networks`],
+            ['Transformers', `${base}/topics`],
+            ['Prompt Engineering', `${base}/topics`],
+            ['AI Alignment', `${base}/topics`],
+          ].map(([label, href]) => (
+            <a href={href} class="sidebar-link" style="font-size:0.8rem;">{label}</a>
+          ))}
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <article style="grid-column:2;min-width:0;">
+
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" style="margin-bottom:1.25rem;">
+        <ol style="list-style:none;padding:0;margin:0;display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--color-text-subtle);">
+          <li><a href={`${base}/`} style="color:var(--color-text-muted);text-decoration:none;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--color-text-muted)'">Home</a></li>
+          <li>›</li>
+          <li><a href={`${base}/topics`} style="color:var(--color-text-muted);text-decoration:none;" onmouseover="this.style.color='var(--color-primary)'" onmouseout="this.style.color='var(--color-text-muted)'">Topics</a></li>
+          <li>›</li>
+          <li style="color:var(--color-text);">Large Language Models</li>
+        </ol>
+      </nav>
+
+      <!-- Article header -->
+      <header style="margin-bottom:2rem;">
+        <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.75rem;">
+          <span class="badge badge-intermediate">⚡ Intermediate</span>
+          <span class="tag">NLP</span>
+          <span class="tag">GPT</span>
+          <span class="tag">Transformers</span>
+          <span class="tag">Generative AI</span>
+        </div>
+        <h1 style="font-size:2.5rem;font-weight:800;line-height:1.15;margin-bottom:0.75rem;">
+          💬 Large Language Models
+        </h1>
+        <p style="font-size:1.1rem;color:var(--color-text-muted);line-height:1.6;margin-bottom:1.5rem;">
+          The technology behind ChatGPT, Claude, Gemini and other modern AI assistants —
+          how they work, what they can do, and what their limits are.
+        </p>
+        <div style="display:flex;align-items:center;gap:1.5rem;font-size:0.8rem;color:var(--color-text-subtle);padding-bottom:1.5rem;border-bottom:1px solid var(--color-border);">
+          <span>📅 Updated April 2025</span>
+          <span>⏱ 10 min read</span>
+          <span>📖 ~3,000 words</span>
+        </div>
+      </header>
+
+      <KnowledgeLevelSelector defaultLevel="beginner" />
+
+      <!-- === BEGINNER PANEL === -->
+      <div id="panel-beginner" class="level-panel active">
+        <div class="prose">
+
+          <Callout type="success" title="Plain English, no jargon">
+            We'll explain LLMs using everyday analogies. If you've ever used ChatGPT, you've already used an LLM!
+          </Callout>
+
+          <section id="what-is-an-llm">
+            <h2>What is a Large Language Model?</h2>
+            <p>
+              A <strong>Large Language Model (LLM)</strong> is an AI that has read an enormous amount of text —
+              books, websites, articles, code — and learned to predict what words come next.
+              That sounds simple, but done at massive scale it creates something surprisingly useful.
+            </p>
+            <p>
+              Think of it like this: if you've read a million detective novels, you start to "just know"
+              how a detective story goes. You could continue one even without knowing the rules.
+              LLMs do the same thing with language — they've read so much that they can write,
+              answer questions, translate, code, and reason.
+            </p>
+
+            <div style="background:var(--color-bg-subtle);border:1px solid var(--color-border);border-radius:12px;padding:1.5rem;margin:1.5rem 0;">
+              <p style="font-weight:700;font-size:0.9rem;margin-bottom:1rem;color:var(--color-text);">Famous LLMs you might know:</p>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.75rem;">
+                {[
+                  { name: 'ChatGPT / GPT-4', maker: 'OpenAI', emoji: '🤖' },
+                  { name: 'Claude', maker: 'Anthropic', emoji: '🧡' },
+                  { name: 'Gemini', maker: 'Google', emoji: '💎' },
+                  { name: 'Llama 3', maker: 'Meta (open)', emoji: '🦙' },
+                ].map(m => (
+                  <div style="background:var(--color-bg-card);border:1px solid var(--color-border);border-radius:8px;padding:0.75rem;text-align:center;">
+                    <div style="font-size:1.5rem;">{m.emoji}</div>
+                    <div style="font-size:0.82rem;font-weight:700;color:var(--color-text);">{m.name}</div>
+                    <div style="font-size:0.72rem;color:var(--color-text-subtle);">{m.maker}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section id="how-it-works">
+            <h2>How does it "understand" text?</h2>
+            <p>
+              Here's a surprise: LLMs don't <em>understand</em> language the way you do.
+              They don't have emotions, beliefs, or experiences. What they do is extremely
+              good <strong>pattern matching</strong> — they've seen so many conversations, articles,
+              and explanations that they can generate text that <em>looks like understanding</em>.
+            </p>
+            <p>
+              Every word you type gets turned into a number (called a <strong>token</strong>).
+              The model looks at all the tokens so far and predicts what token comes next —
+              over and over until the response is complete.
+            </p>
+            <Callout type="info" title="Autocomplete on steroids">
+              You know how your phone keyboard suggests the next word? LLMs work on exactly the same principle —
+              they just do it with billions of parameters and vastly more training data, so the suggestions are
+              coherent paragraphs instead of single words.
+            </Callout>
+          </section>
+
+          <section id="capabilities">
+            <h2>What can LLMs do?</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0;">
+              <div style="background:var(--color-beginner-bg);border:1px solid var(--color-beginner-border);border-radius:8px;padding:1rem;">
+                <p style="font-weight:700;color:var(--color-beginner);margin-bottom:0.5rem;">✅ Good at</p>
+                <ul style="font-size:0.85rem;padding-left:1.25rem;color:var(--color-text-muted);">
+                  <li>Writing & editing</li>
+                  <li>Answering questions</li>
+                  <li>Summarizing long text</li>
+                  <li>Writing code</li>
+                  <li>Translation</li>
+                  <li>Brainstorming ideas</li>
+                </ul>
+              </div>
+              <div style="background:var(--color-bg-subtle);border:1px solid var(--color-border);border-radius:8px;padding:1rem;">
+                <p style="font-weight:700;color:var(--color-text);margin-bottom:0.5rem;">⚠️ Watch out for</p>
+                <ul style="font-size:0.85rem;padding-left:1.25rem;color:var(--color-text-muted);">
+                  <li>Making up facts ("hallucinations")</li>
+                  <li>Recent events (training cutoff)</li>
+                  <li>Complex maths</li>
+                  <li>Consistent long-form logic</li>
+                  <li>Knowing what it doesn't know</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section id="models">
+            <h2>How big is "large"?</h2>
+            <p>
+              "Large" refers to the number of <strong>parameters</strong> — adjustable numbers inside the model.
+              More parameters generally means better performance, but also more computation and cost.
+            </p>
+            <div style="overflow-x:auto;">
+              <table class="data-table" style="border:1px solid var(--color-border);border-radius:8px;overflow:hidden;">
+                <thead>
+                  <tr><th>Model</th><th>Parameters</th><th>Analogy</th></tr>
+                </thead>
+                <tbody>
+                  {[
+                    ['GPT-2 (2019)', '1.5 billion', 'Like a very good student'],
+                    ['GPT-3 (2020)', '175 billion', 'Like an expert generalist'],
+                    ['GPT-4 (2023)', '~1 trillion (est.)', 'Beyond any single human expert'],
+                    ['Human brain', '~100 trillion synapses', 'For reference 😊'],
+                  ].map(([model, params, analogy]) => (
+                    <tr>
+                      <td><strong>{model}</strong></td>
+                      <td>{params}</td>
+                      <td style="font-size:0.82rem;color:var(--color-text-subtle);">{analogy}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- === INTERMEDIATE PANEL === -->
+      <div id="panel-intermediate" class="level-panel">
+        <div class="prose">
+
+          <Callout type="info" title="Prerequisites">
+            Familiarity with neural networks and basic NLP concepts. Some Python knowledge helpful.
+          </Callout>
+
+          <section id="what-is-an-llm">
+            <h2>Architecture Overview</h2>
+            <p>
+              Modern LLMs are based on the <strong>Transformer architecture</strong> (Vaswani et al., 2017).
+              They are autoregressive models trained to predict the next token given a context window of previous tokens:
+            </p>
+            <div class="math-block">
+              P(x<sub>t</sub> | x<sub>1</sub>, ..., x<sub>t-1</sub>; θ)
+            </div>
+            <p>
+              A decoder-only Transformer (GPT-style) stacks N identical blocks, each containing:
+            </p>
+            <ul>
+              <li><strong>Multi-Head Self-Attention (MHSA)</strong> — lets each token attend to all preceding tokens</li>
+              <li><strong>Layer Norm</strong> — stabilizes training (applied pre-attention in modern variants)</li>
+              <li><strong>Feed-Forward Network (FFN)</strong> — two linear layers with GELU activation</li>
+              <li><strong>Residual connections</strong> — enable gradient flow through depth</li>
+            </ul>
+          </section>
+
+          <section id="how-it-works">
+            <h2>Tokenization & Vocabulary</h2>
+            <CodeBlock lang="python" filename="tokenization_demo.py">{`from transformers import GPT2Tokenizer
+
+tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+
+text = "Neural networks learn from data."
+tokens = tokenizer.encode(text)
+decoded = [tokenizer.decode([t]) for t in tokens]
+
+print(tokens)   # [Neural, _networks, _learn, _from, _data, .]
+# [19138, 7686, 2193, 422, 1366, 13]
+
+# GPT-4 uses cl100k_base: ~100k token vocabulary
+# Longer vocab → fewer tokens per sentence → more efficient`}</CodeBlock>
+
+            <h2>Attention Mechanism</h2>
+            <p>Scaled dot-product attention computes how much each token should "attend" to others:</p>
+            <div class="math-block">
+              Attention(Q, K, V) = softmax(QKᵀ / √d<sub>k</sub>) · V
+            </div>
+            <p>
+              Where Q (queries), K (keys), V (values) are linear projections of the input.
+              Multi-head attention runs this h times in parallel with different projections, then concatenates:
+            </p>
+            <CodeBlock lang="python" filename="attention.py">{`import torch
+import torch.nn.functional as F
+
+def scaled_dot_product_attention(Q, K, V, mask=None):
+    d_k = Q.shape[-1]
+    scores = Q @ K.transpose(-2, -1) / d_k ** 0.5
+    if mask is not None:
+        scores = scores.masked_fill(mask == 0, float('-inf'))
+    weights = F.softmax(scores, dim=-1)  # shape: (batch, heads, seq, seq)
+    return weights @ V, weights
+
+class MultiHeadAttention(torch.nn.Module):
+    def __init__(self, d_model=512, n_heads=8):
+        super().__init__()
+        assert d_model % n_heads == 0
+        self.d_k = d_model // n_heads
+        self.n_heads = n_heads
+        self.qkv_proj = torch.nn.Linear(d_model, 3 * d_model)
+        self.out_proj = torch.nn.Linear(d_model, d_model)
+
+    def forward(self, x, mask=None):
+        B, T, C = x.shape
+        qkv = self.qkv_proj(x).reshape(B, T, 3, self.n_heads, self.d_k)
+        qkv = qkv.permute(2, 0, 3, 1, 4)  # (3, B, heads, T, d_k)
+        Q, K, V = qkv.unbind(0)
+        out, _ = scaled_dot_product_attention(Q, K, V, mask)
+        out = out.transpose(1, 2).reshape(B, T, C)
+        return self.out_proj(out)`}</CodeBlock>
+          </section>
+
+          <section id="training">
+            <h2>Training Pipeline: Pre-training + RLHF</h2>
+            <p>Modern instruction-tuned LLMs go through three stages:</p>
+            <div style="display:flex;flex-direction:column;gap:0.75rem;margin:1rem 0;">
+              {[
+                { num: '1', title: 'Pre-training', desc: 'Next-token prediction on ~1T tokens of web text. Learns world knowledge, grammar, reasoning patterns.', color: 'var(--color-beginner)' },
+                { num: '2', title: 'Supervised Fine-tuning (SFT)', desc: 'Fine-tune on high-quality human-written demonstrations of desired behavior (instructions + responses).', color: 'var(--color-intermediate)' },
+                { num: '3', title: 'RLHF / DPO', desc: 'Use human preferences to train a reward model, then optimize policy via PPO or Direct Preference Optimization.', color: 'var(--color-expert)' },
+              ].map(step => (
+                <div style="display:flex;gap:1rem;align-items:flex-start;">
+                  <div style={`flex-shrink:0;width:28px;height:28px;border-radius:50%;background:${step.color};display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:white;`}>{step.num}</div>
+                  <div>
+                    <strong style="font-size:0.9rem;">{step.title}</strong>
+                    <p style="font-size:0.85rem;color:var(--color-text-muted);margin:0.2rem 0 0;">{step.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section id="capabilities">
+            <h2>Context Window & In-Context Learning</h2>
+            <p>
+              The <strong>context window</strong> is how much text the model can "see" at once.
+              GPT-4 supports 128k tokens (~100,000 words). Within this window, models can:
+            </p>
+            <ul>
+              <li><strong>Few-shot learning</strong> — learn from examples in the prompt without any fine-tuning</li>
+              <li><strong>Chain-of-thought prompting</strong> — reason step by step by showing the model how</li>
+              <li><strong>Tool use</strong> — call external APIs, search the web, run code</li>
+            </ul>
+            <Callout type="warning" title="Hallucinations">
+              LLMs can confidently generate plausible but false information. This occurs because they optimize for
+              fluency, not factual accuracy. Retrieval-Augmented Generation (RAG) mitigates this by grounding
+              responses in retrieved documents.
+            </Callout>
+          </section>
+        </div>
+      </div>
+
+      <!-- === EXPERT PANEL === -->
+      <div id="panel-expert" class="level-panel">
+        <div class="prose">
+
+          <Callout type="tip" title="Research-depth content">
+            Detailed architecture internals, scaling laws, training dynamics, and key papers.
+          </Callout>
+
+          <section id="what-is-an-llm">
+            <h2>Scaling Laws</h2>
+            <p>
+              Kaplan et al. (2020) showed that LLM loss follows a power law in compute C, parameters N,
+              and data tokens D:
+            </p>
+            <div class="math-block">
+              L(N) ≈ (N<sub>c</sub>/N)^α<sub>N</sub><br/>
+              L(D) ≈ (D<sub>c</sub>/D)^α<sub>D</sub><br/>
+              Optimal: N ∝ C^0.5,  D ∝ C^0.5  (Kaplan)<br/>
+              Chinchilla (Hoffmann et al., 2022): N ≈ D (tokens ≈ 20× parameters)
+            </div>
+            <p>
+              Chinchilla scaling suggests GPT-3 (175B params, 300B tokens) was significantly undertrained.
+              Optimal for 175B params would be ~3.5T tokens. This led to Llama (65B, 1.4T tokens)
+              outperforming larger but undertrained models.
+            </p>
+          </section>
+
+          <section id="how-it-works">
+            <h2>Positional Encoding: RoPE & ALiBi</h2>
+            <p>
+              Vanilla Transformers use sinusoidal positional embeddings (Vaswani et al.).
+              Modern LLMs use <strong>Rotary Positional Embeddings (RoPE)</strong> — encoding position
+              by rotating Q and K vectors in 2D planes:
+            </p>
+            <div class="math-block">
+              RoPE(q, m) = q · e^(imθ)  for position m<br/>
+              ⟹ ⟨RoPE(q,m), RoPE(k,n)⟩ depends only on q, k, and (m-n)<br/>
+              Enables relative position encoding without explicit bias matrices
+            </div>
+            <CodeBlock lang="python" filename="rope.py">{`import torch
+
+def precompute_freqs_cis(dim: int, end: int, theta: float = 10000.0):
+    """RoPE frequency table. dim = d_k // 2 (pairs of dims)."""
+    freqs = 1.0 / (theta ** (torch.arange(0, dim, 2).float() / dim))
+    t = torch.arange(end)
+    freqs = torch.outer(t, freqs)  # (end, dim/2)
+    return torch.polar(torch.ones_like(freqs), freqs)  # complex
+
+def apply_rotary_emb(xq, xk, freqs_cis):
+    # xq/xk: (batch, seq, n_heads, head_dim)
+    def rotate(x):
+        x_ = torch.view_as_complex(x.reshape(*x.shape[:-1], -1, 2))
+        return torch.view_as_real(x_ * freqs_cis).flatten(-2)
+    return rotate(xq), rotate(xk)`}</CodeBlock>
+
+            <h2>Mixture of Experts (MoE)</h2>
+            <p>
+              GPT-4 and Mixtral use <strong>sparse MoE</strong>: each token is routed to K of E expert FFN sublayers.
+              This decouples parameter count from per-token FLOPs:
+            </p>
+            <div class="math-block">
+              h = Σ<sub>i∈TopK(g(x))</sub> g<sub>i</sub>(x) · E<sub>i</sub>(x)<br/>
+              where g(x) = softmax(W<sub>g</sub>x) — learned routing weights<br/>
+              E = 8 experts, K = 2 active: 4× params, same inference cost
+            </div>
+            <p>
+              Load balancing loss encourages uniform expert utilization to prevent "expert collapse":
+            </p>
+            <div class="math-block">
+              L<sub>aux</sub> = α · E · Σ<sub>i</sub> (f<sub>i</sub> · P<sub>i</sub>)<br/>
+              f<sub>i</sub> = fraction of tokens routed to expert i (per batch)<br/>
+              P<sub>i</sub> = mean routing probability for expert i
+            </div>
+          </section>
+
+          <section id="training">
+            <h2>RLHF Deep Dive</h2>
+            <p>
+              Reinforcement Learning from Human Feedback (Christiano et al., 2017; Ouyang et al., 2022) uses
+              a reward model r<sub>φ</sub>(x, y) trained on human preference pairs, then optimizes:
+            </p>
+            <div class="math-block">
+              max<sub>π</sub> 𝔼<sub>x~D, y~π</sub>[r<sub>φ</sub>(x,y)] − β · KL[π || π<sub>SFT</sub>]
+            </div>
+            <p>
+              The KL penalty prevents reward hacking (policy exploiting the reward model).
+              <strong>DPO (Rafailov et al., 2023)</strong> reformulates this as a supervised problem,
+              eliminating the separate reward model and PPO training:
+            </p>
+            <div class="math-block">
+              L<sub>DPO</sub>(π<sub>θ</sub>) = −𝔼[log σ(β log π<sub>θ</sub>(y<sub>w</sub>|x)/π<sub>ref</sub>(y<sub>w</sub>|x)<br/>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;− β log π<sub>θ</sub>(y<sub>l</sub>|x)/π<sub>ref</sub>(y<sub>l</sub>|x))]
+            </div>
+          </section>
+
+          <section id="further-reading">
+            <h2>Key Papers</h2>
+            <ul>
+              <li>Vaswani et al. (2017). <em>Attention Is All You Need.</em> — Transformer architecture.</li>
+              <li>Radford et al. (2018). <em>Improving Language Understanding by Generative Pre-Training.</em> — GPT-1.</li>
+              <li>Brown et al. (2020). <em>Language Models are Few-Shot Learners.</em> — GPT-3.</li>
+              <li>Kaplan et al. (2020). <em>Scaling Laws for Neural Language Models.</em></li>
+              <li>Hoffmann et al. (2022). <em>Training Compute-Optimal Large Language Models.</em> — Chinchilla.</li>
+              <li>Ouyang et al. (2022). <em>Training language models to follow instructions with human feedback.</em> — InstructGPT/RLHF.</li>
+              <li>Rafailov et al. (2023). <em>Direct Preference Optimization.</em> — DPO.</li>
+              <li>Su et al. (2023). <em>RoFormer: Enhanced Transformer with Rotary Position Embedding.</em></li>
+              <li>Jiang et al. (2024). <em>Mixtral of Experts.</em></li>
+            </ul>
+          </section>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--color-border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+        <a href={`${base}/topics/neural-networks`} class="btn btn-secondary">← Neural Networks</a>
+        <a href={`${base}/topics`} class="btn btn-secondary">All Topics →</a>
+      </div>
+
+    </article>
+
+    <!-- Right sidebar -->
+    <aside style="grid-column:3;position:sticky;top:80px;align-self:start;" class="hide-mobile">
+      <div style="background:var(--color-bg-card);border:1px solid var(--color-border);border-radius:12px;padding:1.25rem;margin-bottom:1rem;">
+        <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-subtle);margin-bottom:0.75rem;">Quick Facts</p>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.75rem;font-size:0.82rem;">
+          <li><span style="color:var(--color-text-subtle);">Architecture</span><br/><strong>Transformer (decoder)</strong></li>
+          <li><span style="color:var(--color-text-subtle);">Introduced</span><br/><strong>GPT-1, 2018</strong></li>
+          <li><span style="color:var(--color-text-subtle);">Training</span><br/><strong>Self-supervised + RLHF</strong></li>
+          <li><span style="color:var(--color-text-subtle);">Largest public</span><br/><strong>~1T parameters (est.)</strong></li>
+        </ul>
+      </div>
+      <div style="background:var(--color-primary-light);border:1px solid var(--color-intermediate-border);border-radius:12px;padding:1.25rem;">
+        <p style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-primary);margin-bottom:0.5rem;">Try It</p>
+        <p style="font-size:0.82rem;color:var(--color-text-muted);">Open ChatGPT and ask it to explain itself. The response is a live LLM demo!</p>
+      </div>
+    </aside>
+
+  </div>
+</PageLayout>
+
+<style>
+  @media (max-width: 900px) {
+    .article-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
