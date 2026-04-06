@@ -1,0 +1,25 @@
+---
+export interface Props {
+  type?: 'info' | 'success' | 'warning' | 'tip';
+  title?: string;
+}
+const { type = 'info', title } = Astro.props;
+
+const icons = {
+  info: '💡',
+  success: '✅',
+  warning: '⚠️',
+  tip: '🔬',
+};
+const typeClass = `callout-${type}`;
+---
+
+<div class={`callout ${typeClass}`}>
+  <span style="font-size:1.1rem;flex-shrink:0;">{icons[type]}</span>
+  <div style="flex:1;">
+    {title && <strong style="display:block;margin-bottom:0.25rem;color:var(--color-text);font-size:0.9rem;">{title}</strong>}
+    <div style="font-size:0.875rem;color:var(--color-text-muted);">
+      <slot />
+    </div>
+  </div>
+</div>
